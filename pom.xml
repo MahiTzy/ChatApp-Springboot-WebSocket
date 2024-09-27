@@ -13,7 +13,7 @@
 
     <groupId>com.spring</groupId>
     <artifactId>ChatApp</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1-RELEASE</version>
     <name>ChatApp</name>
     <description>Demo project for Spring Boot</description>
 
@@ -21,6 +21,9 @@
 
     <properties>
         <java.version>17</java.version>
+        <sonar.host.url>http://13.233.197.246:9000/</sonar.host.url>
+        <sonar.login>squ_5abf984b914436f64d8d5f976bbd4a1e8054a011</sonar.login>
+        
     </properties>
 
     <dependencies>
