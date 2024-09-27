@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define the custom Maven path located in /opt directory
-        MAVEN_HOME = "/opt/maven" // Replace with your actual Maven version
+        MAVEN_HOME = '/opt/maven' // Replace with your actual Maven version
         PATH = "${MAVEN_HOME}/bin:${env.PATH}" // Append Maven to the existing PATH
     }
 
@@ -27,6 +27,15 @@ pipeline {
                 // Assuming you have SonarQube configured and available in Jenkins
                 withSonarQubeEnv('Sonar-Server-9.9.1') { // Replace with your actual SonarQube configuration name
                     sh "${MAVEN_HOME}/bin/mvn sonar:sonar"
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Deploy the application to the specified server
+                sshagent(['Tomcat-Server']) {
+                    sh 'ssh ubuntu@3.111.55.64 "rm -rf /home/ubuntu/tomcat-9/webapps/ChatApp.war"'
+                    sh 'scp target/ChatApp.war ubuntu@3.111.55.64:/home/ubuntu/tomcat-9/webapps'
                 }
             }
         }
