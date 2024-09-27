@@ -34,8 +34,15 @@ pipeline {
             steps {
                 // Deploy the application to the specified server
                 sshagent(['Tomcat-Server']) {
-                    sh 'ssh ubuntu@3.111.55.64 "rm -rf /home/ubuntu/tomcat-9/webapps/ChatApp.war"'
-                    sh 'scp target/ChatApp.war ubuntu@3.111.55.64:/home/ubuntu/tomcat-9/webapps'
+                    // Disable strict host key checking temporarily
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.111.55.64 "rm -rf /home/ubuntu/tomcat-9/webapps/ChatApp.war"'
+
+                    // Copy the new WAR file to the server
+                    sh 'scp -o StrictHostKeyChecking=no target/ChatApp.war ubuntu@3.111.55.64:/home/ubuntu/tomcat-9/webapps/'
+
+                    // Restart Tomcat
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.111.55.64 "/home/ubuntu/tomcat-9/bin/shutdown.sh"'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.111.55.64 "/home/ubuntu/tomcat-9/bin/startup.sh"'
                 }
             }
         }
